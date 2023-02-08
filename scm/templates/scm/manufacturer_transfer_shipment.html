@@ -1,0 +1,33 @@
+{% extends 'scm/manufacturer_index.html' %}
+{% load static %}
+{% block content %}
+<form action="transfer_shipment" method="POST">
+    {% csrf_token%}
+    <div class="shipment_container">
+        <div class="transfer_shipment_container">
+            <p class="title">
+                Transfer Shipment
+            </p>
+            <div class="input-container">
+                <h5>Shipment ID</h5>
+                <select class="dropdown_shipmentID" name="shipmentID" >
+                    <option value='' selected disabled="">Select Shipment ID</option>
+                {% for shipment in shipments %}
+                    <option value='{{shipment.id}}'>{{ shipment.id }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="input-container">
+                <h5>Receiver</h5>
+                <select class="dropdown_receiver" name="receiver_name" >
+                    <option value='' selected disabled="">Select Receiver</option>
+                {% for receiver in receivers %}
+                    <option value='{{receiver.name}}'>{{ receiver.name }}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <input type="submit" name="action" class="btn" value="Confirm">
+        </div>
+    </div>
+</form>
+{% endblock content %}

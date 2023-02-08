@@ -1,0 +1,50 @@
+{% extends 'scm/admin_index.html' %}
+{% load static %}
+{% block content %}
+<div class="vaccine-content">
+    <h2>Vaccine Database</h2>
+    <div class="container-vaccine">
+        <div class="div-vaccine-table">
+          <div class="vaccine-function-bar">
+            <a href="/show_vaccine_form">   
+              <button type="button" class="add-btn">
+                <i class="fa-solid fa-plus"></i>
+                Add Vaccine 
+              </button>
+            </a>
+          </div>
+          <table class="table-vaccine">
+            <thead class="table-header">
+              <tr>
+                <th>Vaccine Name</th>
+                <th>Disease</th>
+                <th>Dosage</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for vaccine in vaccines %}
+              <tr>
+                <td>
+                    {{vaccine.name}}
+                </td>
+                <td>
+                    {{vaccine.disease}}
+                </td>
+                <td>
+                    {{vaccine.dosage}}
+                </td>
+                <td>
+                    <a href="/edit_vaccine/{{ vaccine.name }}">
+                      <button type="button" class="edit-button">
+                        Edit
+                      </button>
+                    </a>
+                    <a href="/delete_vaccine/{{ vaccine.name }}">
+                      <button type="button" class="delete-button">
+                        Delete
+                      </button>
+                    </a>
+                </td>
+            {% endfor %}
+{% endblock content %}

@@ -1,0 +1,121 @@
+{% extends 'scm/manufacturer_index.html' %}
+{% load static %}
+{% block content %}
+<div class="dashboard_content">
+    <div class="data_box_container">
+        <div class="data_box">
+            <i class="fa-solid fa-truck-fast"></i>
+            <div>
+                <p class="data_box_text">Shipments On Hand</p>
+                <p class="data_box_number">{{shipments_onhand_count}}</p>
+            </div>
+        </div>
+        <div class="data_box">
+            <i class="fa-solid fa-envelope-circle-check"></i>
+            <div>
+                <p class="data_box_text">Requests Sent (In Progress)</p>
+                <p class="data_box_number">{{requests_inprogress_count}}</p>
+            </div>
+        </div>
+        <div class="data_box">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <div>
+                <p class="data_box_text">Requests Received</p>
+                <p class="data_box_number">{{requests_received_count}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="data_list">
+        <div class="user_list_container">
+            <div class="recent_users_list">
+                <div class="dashboard_table_title">
+                    <p>Recent Requests Sent</p>
+                    <a href="/requests_sent">
+                        <button class="viewall_btn">View All</button>
+                    </a>
+                </div>
+                <table class="dashboard_table-user">
+                    <thead class="dashboard_table-header">
+                        <tr>
+                            <th>Shipment ID</th>
+                            <th>Vaccine</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for shipment in shipments %}
+                            <tr>
+                                <td>
+                                    <p style="text-align:center">{{shipment.supply_chain.id}}</p>
+                                </td>
+                                <td>
+                                    <div class="vaccine_cart_div">
+                                    {% for cart_items in carts_items_list %}
+                                        {% if shipment.supply_chain.cart == cart_items.cart%}
+                                            <p>{{cart_items.vaccine_name}}<span class="text_quantity">&nbsp&nbsp&nbsp&nbsp&nbsp{{cart_items.vaccine_quantity}}</span></p>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if shipment.status == 'In Progress' %}
+                                        <span class="badge badge-neutral">In Progress</span>
+                                    {% elif shipment.status == 'Rejected' %}
+                                        <span class="badge badge-fail">Rejected</span>
+                                    {% else %}
+                                        <span class="badge badge-success">Accepted</span>
+                                    {% endif %}
+                                </td> 
+                            </tr>
+                        {% endfor %}       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="shipment_list_container">
+            <div class="recent_shipments_list">
+                <div class="dashboard_table_title">
+                    <p>Shipments On Hand</p>
+                    <a href="/show_shipment">
+                        <button class="viewall_btn">View All</button>
+                    </a>
+                </div>
+                <table class="dashboard_table-user">
+                    <thead class="dashboard_table-header">
+                        <tr>
+                            <th>Shipment ID</th>
+                            <th>Vaccine</th>
+                            <th>Transferring Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ship in ships %}
+                        <tr>
+                            <td>
+                                <p style="text-align:center">{{ship.id}}</p>
+                            </td>
+                            <td>
+                                <div class="vaccine_cart_div">
+                                {% for cart_items in carts_items_list2 %}
+                                    {% if ship.cart == cart_items.cart%}
+                                        <p>{{cart_items.vaccine_name}}<span class="text_quantity">&nbsp&nbsp&nbsp&nbsp&nbsp{{cart_items.vaccine_quantity}}</span></p>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                            </td>
+                            <td>
+                            {% if ship.status_transferring == False %}
+                                <span class="badge badge-fail">False</span>
+                            {% else %}
+                                <span class="badge badge-success">True</span>
+                            {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content%}

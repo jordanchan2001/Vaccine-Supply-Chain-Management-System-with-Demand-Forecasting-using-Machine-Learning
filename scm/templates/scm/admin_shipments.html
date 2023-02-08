@@ -1,0 +1,227 @@
+{% extends 'scm/admin_index.html' %}
+{% load static %}
+{% block content %}
+{% for shipment in shipments%}
+<div class="popup" id={{shipment.id}}>
+    <div class="overlay"></div>
+    <div class="content">
+        <div class="close_button" id ={{shipment.id}} onclick ="togglePopup(this)">X</div>
+        <div class="popup_header">Shipment {{shipment.id}}</div>
+        <div class="popup_info">
+            <div class="shipment_info">
+                <h2>Items</h2>
+                {% for cart_items in carts_items_list %}
+                    {% if shipment.cart == cart_items.cart%}
+                        <div class="vaccine_info">
+                            <p>{{cart_items.vaccine_name}}</p>
+                            <p class="popup_quantity_text">Quantity : {{cart_items.vaccine_quantity}}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="ownership_info">
+                <h2>Ownership Trace</h2>
+                {% for ownership in ownerships_list %}
+                    {% if ownership.supply_chain == shipment %}
+                        <div class="ownership_container">
+                            <div class="ownership_shape">
+                                <div class="shape_part1"></div>
+                                <div class="shape_part2"></div>
+                                <div class="shape_part3"></div>
+                            </div>
+                            <div class="ownership_infobox">
+                                <p class="popup_company_name">{{ownership.sender}}</p>
+                                {% for profile in profiles %}
+                                    {% if profile.name == ownership.sender %}
+                                    <p class="popup_location">Location : {{profile.location}}</p>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if shipment.issue == True%}
+                    <div class="ownership_container">
+                        <div class="ownership_shape">
+                            <div class="shape_part1"></div>
+                            <div class="shape_part2"></div>
+                            <div class="shape_part3"></div>
+                        </div>
+                        <div class="ownership_infobox">
+                            <p class="popup_company_name">{{shipment.ownership.name}}</p>
+                            {% for profile in profiles %}
+                                {% if profile == shipment.ownership %}
+                                    <p class="popup_location">Location : {{profile.location}}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="user-content">
+    <h2>Shipments Database</h2>
+    <div>
+        <input type="text" class="searchbar" id="searchInput" placeholder="Search Anything Here...">
+        <select class="searchFilter" name="filter" id="filter">
+            <option value="All Issue">All Issue</option>
+            <option value="True">True</option>
+            <option value="False">False</option>
+        </select>
+    </div>
+    <div class="div-user-table">
+        <table class="table-user" id="table-user">
+            <thead class="table-header">
+                <tr>
+                    <th>Shipment ID</th>
+                    <th>Vaccine</th>
+                    <th>Current Owner</th>
+                    <th>Origin</th>
+                    <th>Time Created</th>
+                    <th>Issue</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shipment in shipments %}
+                <tr>
+                    <td>
+                        <p style="text-align:center">{{shipment.id}}</p>
+                    </td>
+                    <td>
+                        <div class="vaccine_cart_div">
+                        {% for cart_items in carts_items_list %}
+                            {% if shipment.cart == cart_items.cart%}
+                                <p>{{cart_items.vaccine_name}}<span class="text_quantity">&nbsp&nbsp&nbsp&nbsp&nbsp{{cart_items.vaccine_quantity}}</span></p>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+                        <p>{{shipment.ownership.name}}</p>
+                    </td>
+                    <td>
+                        <p>{{shipment.origin}}</p>
+                    </td>
+                    <td>
+                        <p>{{shipment.time_created}}</p>
+                    </td>
+                    <td>
+                        {% if shipment.issue == False %}
+                            <span class="badge badge-fail">False</span>
+                        {% else %}
+                            <span class="badge badge-success">True</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="view_btn" id = {{shipment.id}} onclick="togglePopup(this)">View</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+
+function togglePopup(btn){
+    var id = btn.id;
+    console.log(id);
+    document.getElementById(id).classList.toggle("active");
+    // document.getElementById("popup-1").classList.toggle("active");
+}
+
+window.onload = function() {
+    var filterSel = document.getElementById("filter");
+    
+    filterSel.onchange = function()  {
+        var selectedValue = document.getElementById("filter").value;
+        var role =document.querySelectorAll("tr>td:nth-child(6)>span");
+        
+        if (selectedValue !=="All Issue"){
+            for (let i=0; i<role.length;i++){
+                if (selectedValue !== role[i].innerHTML){
+                    role[i].parentElement.parentElement.style.display='none';
+                } else {
+                    role[i].parentElement.parentElement.style.display='table-row';
+                }
+            }
+        } else {
+            document.querySelectorAll("tr").forEach(el => {
+                el.style.display='table-row';
+            });
+        }
+    };
+};
+
+function searchTable() {
+  // Get the search input field and the table:
+  var input = document.getElementById("searchInput");
+  var table = document.getElementById("table-user");
+
+  // Get the search input value:
+  var filter = input.value.toUpperCase();
+
+  // Get the table rows:
+  var rows = table.getElementsByTagName("tr");
+  
+
+  // Loop through all the rows:
+  for (var i = 1; i < rows.length; i++) {
+    // Get the cells in the current row:
+    var cells = rows[i].getElementsByTagName("td");
+
+    // Set the found flag to false:
+    var found = false;
+    console.log (cells.length)
+    // Loop through all the cells:
+    for (var j = 0; j < cells.length; j++) {
+      // Get the <p> element inside the current cell:
+      if (j == 0 || j ==2 || j==3 || j==4 ){
+        var p = cells[j].getElementsByTagName("p")[0];
+        console.log(p)
+      
+        // Check if the <p> element value contains the search input value:
+        if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            // If found, set the flag to true and break the loop:
+            found = true;
+            console.log(p.innerHTML)
+            console.log('urmum')
+            break;
+        }
+      } else if (j==5){
+        var span = cells[j].getElementsByTagName("span")[0];
+      
+        // Check if the <p> element value contains the search input value:
+        if (span.innerHTML.toUpperCase().indexOf(filter) > -1) {
+            // If found, set the flag to true and break the loop:
+            found = true;
+            console.log('fuck u')
+            break;
+        }
+
+      }
+    
+    }
+
+    // If the flag is true, show the row, otherwise hide it:
+    if (found) {
+      rows[i].style.display = "";
+    } else {
+      rows[i].style.display = "none";
+    }
+  }
+}
+
+var input = document.getElementById("searchInput");
+input.addEventListener("input", searchTable);
+
+</script>
+{% endblock content %}

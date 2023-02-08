@@ -1,0 +1,32 @@
+{% extends 'scm/hospital_index.html' %}
+{% load static %}
+{% block content %}
+<div class="request_container">
+    <h2>Requests Received</h2>
+    {% for shipment in shipments %}
+        <div class="request_box">
+            <div class="request_content">
+                {% for user in allUsers %}
+                    {% if user.name == shipment.sender %}
+                        <img class="company_logo" src="{{ user.profileimg.url }}">
+                    {% endif %}
+                {% endfor %}
+                <div class="request_subcontent">
+                    <p>From: {{shipment.sender}}</p>
+                    <div class="vaccine_cart_div">
+                        {% for cart_items in carts_items_list %}
+                            {% if shipment.supply_chain.cart == cart_items.cart%}
+                                <p>{{cart_items.vaccine_name}}<span class="text_quantity">&nbsp&nbsp&nbsp&nbsp&nbsp{{cart_items.vaccine_quantity}}</span></p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <p>Shipment Transfered at: {{shipment.time_shipment}}</p>
+            <div class="button_container">
+                <a href="/reject_request/{{ shipment.id }}"><button type="button" class="reject_btn">Reject</button></a>
+                <a href="/hospital_accept_request/{{ shipment.id }}"><button type="button" class="accept_btn">Accept</button></a>
+            </div>
+        </div>            
+    {% endfor %}
+{% endblock content %}

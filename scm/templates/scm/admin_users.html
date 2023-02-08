@@ -1,0 +1,106 @@
+{% extends 'scm/admin_index.html' %}
+{% load static %}
+{% block content %}
+<div class="user-content">
+    <h2>User Database</h2>
+    <div>
+      <select class="searchFilter" name="filter" id="filter">
+          <option value="All Role">All Role</option>
+          <option value="Manufacturer">Manufacturer</option>
+          <option value="Hospital">Hospital</option>
+      </select>
+    </div>
+    <div class="container-user">
+        <div class="div-user-table">
+          <table class="table-user">
+            <thead class="table-header">
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Location</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for profile in profiles %}
+              <tr>
+                <td>
+                  <div class="col-name">
+                    <img
+                         src="{{profile.profileimg.url}}"
+                         alt=""
+                         class='profile-image'
+                         />
+                    <div class="container-name-email">
+                      <p class="text-name">{{profile.name}}</p>
+                      <p class="text-email">{{profile.user.email}}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <p>{{profile.role}}</p>
+                </td>
+                <td>
+                  {% if profile.status == 'Inactive' %}
+                    <span class="badge badge-fail">Inactive</span>
+                  {% else %}
+                    <span class="badge badge-success">Active</span>
+                  {% endif %}
+                </td>
+                <td class="text-address">{{profile.location}}</td>
+                <td>
+                  <a href="/edit_user/{{ profile.id_user }}">
+                    <button type="button" class="edit-button">
+                      Edit
+                    </button>
+                  </a>
+                  <a href="/delete_user/{{ profile.id_user }}">
+                    <button type="button" class="delete-button">
+                      Delete
+                    </button>
+                  </a>
+                  <a href="/activate_user/{{ profile.id_user }}">
+                    <button type="button" class="activate-button">
+                      Activate
+                    </button>
+                  </a>
+                  
+                  
+                </td>
+              </tr>
+              {% endfor %}
+            
+              
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+</div>
+
+<script>
+window.onload = function() {
+    var filterSel = document.getElementById("filter");
+    
+    filterSel.onchange = function()  {
+        var selectedValue = document.getElementById("filter").value;
+        var role =document.querySelectorAll("tr>td:nth-child(2)>p");
+        
+        if (selectedValue !=="All Role"){
+            for (let i=0; i<role.length;i++){
+                if (selectedValue !== role[i].innerHTML){
+                    role[i].parentElement.parentElement.style.display='none';
+                } else {
+                    role[i].parentElement.parentElement.style.display='table-row';
+                }
+            }
+        } else {
+            document.querySelectorAll("tr").forEach(el => {
+                el.style.display='table-row';
+            });
+        }
+    };
+};
+</script>
+{% endblock content %}

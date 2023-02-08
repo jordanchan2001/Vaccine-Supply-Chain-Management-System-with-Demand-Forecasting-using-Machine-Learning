@@ -1,0 +1,58 @@
+{% extends 'scm/manufacturer_index.html' %}
+{% load static %}
+{% block content %}
+<form action="create_shipment" method="POST">
+    {% csrf_token%}
+    <div class="shipment_container">
+        <div class="create_shipment_container">
+            <p class="title">
+                Create Shipment
+            </p>
+            <div class="input-container">
+                <h5>Vaccine Name</h5>
+                <select required class="dropdown_vaccine" name="vaccine_name" >
+                {% for vaccine in vaccines %}
+                    <option value='{{vaccine.name}}'>{{ vaccine.name }}</option>
+                {% endfor %}
+                </select>
+            </div>
+
+            <div class="input-container">
+                <h5>Quantity</h5>
+                <input type="text" class="normal-input" autocomplete="off" name="quantity">
+            </div>
+            <div class="button-container">  
+                <input type="submit" name="action" class="add_to_cart_btn" value="Add">
+                <input type="submit" name="action" class="clear_cart_btn" value="Clear Cart">
+                
+            </div>
+            <input type="submit" name="action" class="btn" value="Confirm">
+        </div>
+        <div class="show_cart_container">
+            <div class="icon_title">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <p class="title">
+                    Cart
+                </p>
+            </div>
+            <div class="show_vaccine_list">
+                {% for cartitem in cartitems %}
+                <div class="vaccine_content">
+                    <a href="/delete_cart_item/{{ cartitem.id }}">
+                        <button type="button"  class="close_btn"><i class="fa-solid fa-x"></i></button>
+                    </a>
+                    
+                    <div class="vaccine_text">
+                        <p>Vaccine Name:<input type="text" disabled name="vaccine_name" value={{cartitem.vaccine_name}}></p>
+                        <p>Quantity:<input type="text" disabled name="vaccine_quantitiy" value={{cartitem.vaccine_quantity}}></p>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    
+</form>
+
+{% endblock content %}

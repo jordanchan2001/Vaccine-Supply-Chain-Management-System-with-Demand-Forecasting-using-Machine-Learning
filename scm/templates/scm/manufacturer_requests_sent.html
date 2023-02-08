@@ -1,0 +1,89 @@
+{% extends 'scm/manufacturer_index.html' %}
+{% load static %}
+{% block content %}
+<div class="user-content">
+    <h2>Requests Sent</h2>
+    <div>
+        <select class="searchFilter" name="filter" id="filter">
+            <option value="All Status">All Status</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </div>
+    <div class="div-user-table">
+        <table class="table-user">
+            <thead class="table-header">
+                <tr>
+                    <th>Shipment ID</th>
+                    <th>Vaccine</th>
+                    <th>Origin</th>
+                    <th>Receiver</th>
+                    <th>Time Shipment</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shipment in shipments %}
+                <tr>
+                    <td>
+                        <p style="text-align:center">{{shipment.supply_chain.id}}</p>
+                    </td>
+                    <td>
+                        <div class="vaccine_cart_div">
+                        {% for cart_items in carts_items_list %}
+                            {% if shipment.supply_chain.cart == cart_items.cart%}
+                                <p>{{cart_items.vaccine_name}}<span class="text_quantity">&nbsp&nbsp&nbsp&nbsp&nbsp{{cart_items.vaccine_quantity}}</span></p>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+                        <p>{{shipment.supply_chain.origin}}</p>
+                    </td>
+                    <td>
+                        <p class="company_text">{{shipment.receiver}}</p>
+                    </td>
+                    <td>
+                        <p class="company_text">{{shipment.time_shipment}}</p>
+                    </td>
+                    <td>
+                        {% if shipment.status == 'In Progress' %}
+                            <span class="badge badge-neutral">In Progress</span>
+                        {% elif shipment.status == 'Rejected' %}
+                            <span class="badge badge-fail">Rejected</span>
+                        {% else %}
+                            <span class="badge badge-success">Accepted</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    window.onload = function() {
+        var filterSel = document.getElementById("filter");
+        
+        filterSel.onchange = function()  {
+            var selectedValue = document.getElementById("filter").value;
+            var status =document.querySelectorAll("tr>td:nth-child(6)>span");
+            
+            if (selectedValue !=="All Status"){
+                for (let i=0; i<status.length;i++){
+                    if (selectedValue !== status[i].innerHTML){
+                        status[i].parentElement.parentElement.style.display='none';
+                    } else {
+                        status[i].parentElement.parentElement.style.display='table-row';
+                    }
+                }
+            } else {
+                document.querySelectorAll("tr").forEach(el => {
+                    el.style.display='table-row';
+                });
+            }
+        };
+    };
+</script>
+{% endblock content %}

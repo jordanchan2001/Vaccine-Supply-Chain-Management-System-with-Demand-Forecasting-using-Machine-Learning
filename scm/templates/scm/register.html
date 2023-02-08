@@ -1,0 +1,100 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{%static 'css/register.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/5b2c1ebfb7.js" crossorigin="anonymous"></script>
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>Register Form</title>
+        
+    </head>
+
+    <body>
+        {% for message in messages%}
+        <div class="error-div">
+            <div class="popup_msg">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                <p class="error-msg">{{message}}</p>
+            </div>
+            <div class="popup_close_btn" onclick="this.parentElement.style.display = 'none' ">X</div>
+        </div>
+        {% endfor %}
+        <div class="container">
+            <div class="img">
+                <a href ="/">
+                    <img src="{%static 'images/logo.png' %}">
+                </a>
+            </div>
+            <h2 class="title">Sign Up</h2>
+            <div class="singup-content">
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="input-div one">
+                        <div class="i">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="div">
+                            <h5>Username</h5>
+                            <input type="text" class="input" autocomplete="off" name="username">
+                        </div>
+                    </div>
+                    <div class="input-div one">
+                        <div class="i">
+                            <i class="fa-solid fa-hospital"></i>
+                        </div>
+                        <div class="div">
+                            <h5>Name</h5>
+                            <input type="text" class="input" autocomplete="off" name="name">
+                        </div>
+                    </div>
+                    <div class="input-div">
+                        <div class="i">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <div class="div">
+                            <h5>Email</h5>
+                            <input type="email" class="input" autocomplete="off" name="email">
+                        </div>
+                    </div>
+                    <div class="input-div">
+                        <div class="i">
+                            <i class="fa-solid fa-suitcase-medical"></i>
+                        </div>
+                        <div class="div">
+                            <select required class="dropdown" name="user_type" >
+                                <option value='' selected="selected" disabled="">Select User Type</option>
+                                <option value='Manufacturer'>Manufacturer</option>
+                                <option value='Hospital'>Hospital</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-div">
+                        <div class="i">
+                            <i class="fa-solid fa-location-pin"></i>
+                        </div>
+                        <div class="div">
+                            <h5>Location</h5>
+                            <input type="text" class="input" autocomplete="off" name="location">
+                        </div>
+                    </div>
+                    <div class="input-div">
+                        <div class="i">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="div">
+                            <h5>Password</h5>
+                            <input type="password" class="input" autocomplete="off" name="password">
+                        </div>
+                    </div>
+                    
+                    <input type="submit" class="btn" value="Register">
+                    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript" src="{%static 'js/login.js' %}"></script>
+    </body>
+
+</html>

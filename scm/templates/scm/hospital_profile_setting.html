@@ -1,0 +1,48 @@
+{% extends 'scm/hospital_index.html' %}
+{% load static %}
+{% block content %}
+<form action="update_profile" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="hidden_username" value="{{loginUser.user.username}}">
+    <div class="shipment_container">
+        <div class="transfer_shipment_container">
+            <p class="title">
+                Update Profile
+            </p>
+            <div class="profile_container">
+                <div class="input-container">
+                    <h5>Username</h5>
+                    <input type="text" class="profile_input_disable" disabled autocomplete="off" name="username" value="{{loginUser.user.username}}">
+                </div>
+                <div class="input-container">
+                    <h5>Name</h5>
+                    <input type="text" class="profile_input_disable" disabled autocomplete="off" name="name" value="{{loginUser.name}}">
+                </div>
+                <div class="input-container">
+                    <h5>Password</h5>
+                    <input type="password" class="profile_input" autocomplete="off" name="password" placeholder="Leave it empty to reuse the old password ..">
+                </div>
+                
+                <div class="input-container">
+                    <h5>Email</h5>
+                    <input type="email" class="profile_input" autocomplete="off" name="email" value="{{loginUser.user.email}}">
+                </div>
+                <div class="input-container">
+                    <h5>User Type</h5>
+                    <input type="text" class="profile_input_disable" disabled autocomplete="off" name="role" value="{{loginUser.role}}">
+                </div>
+                <div class="input-container">
+                    <h5>Profile Image</h5>
+                    <input type="file" autocomplete ="off" name="profileImg" accept="image/*" />
+                </div>
+                <div class="input-container">
+                    <h5>Location</h5>
+                    <input type="text" class="profile_input" autocomplete="off" name="location" value="{{loginUser.location}}">
+                </div>
+            </div>
+            <input type="submit" name="action" class="btn" value="Confirm">
+        </div>
+    </div>
+</form>
+
+{% endblock content %}

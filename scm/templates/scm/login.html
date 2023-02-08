@@ -1,0 +1,74 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{%static 'css/login.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/5b2c1ebfb7.js" crossorigin="anonymous"></script>
+
+<!DOCTYPE html>
+<html>
+
+   <head>
+      <meta charset="utf-8">
+
+      <title>Login Form</title>
+   </head>
+
+   <body>
+      {% for message in messages%}
+         {%if "success" in message.tags %}
+         <div class="success-div">
+            <div class="popup_msg">
+                <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                <p class="success-msg">{{message}}</p>
+            </div>
+            <div class="popup_close_btn" onclick="this.parentElement.style.display = 'none' ">X</div>
+        </div>
+         {% endif %}
+         {%if "error" in message.tags %}
+            <div class="error-div">
+               <div class="popup_msg">
+                  <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                  <p class="error-msg">{{message}}</p>
+               </div>
+               <div class="popup_close_btn" onclick="this.parentElement.style.display = 'none' ">X</div>
+            </div>
+         {% endif %}
+      {% endfor %}
+      <div class="container">
+         <div class="img">
+            <img src="{%static 'images/bg.svg' %}">
+         </div>
+         <div class="login-content">
+            <form action="" method="POST">
+               {% csrf_token %}
+               <img src="{%static 'images/logo.png' %}">
+               <h2 class="title">Welcome  </h2>
+               <div class="input-div one">
+                  <div class="i">
+                     <i class="fas fa-user"></i>
+                  </div>
+                  <div class="div">
+                     <h5>Username</h5>
+                     <input type="text" class="input" name="username">
+                  </div>
+               </div>
+               <div class="input-div pass">
+                  <div class="i">
+                     <i class="fas fa-lock"></i>
+                  </div>
+                  <div class="div">
+                     <h5>Password</h5>
+                     <input type="password" class="input" name="password">
+                  </div>
+               </div>
+               <input type="submit" class="btn" value="Login">
+               <a href="/public_page">
+                  <button type="button" class="btn_public">Public Access</button>
+               </a>
+               <p>Don't have an account? <a href="/register">Register here</a></p>
+            </form>
+         </div>
+      </div>
+      
+      <script type="text/javascript" src="{%static 'js/login.js' %}"></script>
+   </body>
+</html>

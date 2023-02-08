@@ -1,0 +1,77 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{%static 'css/main.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/5b2c1ebfb7.js" crossorigin="anonymous"></script>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Manufacturer Home</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        {% for message in messages%}
+            {%if "success" in message.tags %}
+                <div class="msg-container">
+                    <div class="success-div">
+                        <div class="popup_msg">
+                            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                            <p class="success-msg">{{message}}</p>
+                        </div>
+                        <div class="popup_close_btn" onclick="this.parentElement.parentElement.style.display = 'none' ">X</div>
+                    </div>
+                </div>
+            {% endif %}
+            {%if "error" in message.tags %}
+            <div class="msg-container">
+                <div class="error-div">
+                    <div class="popup_msg">
+                        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                        <p class="error-msg">{{message}}</p>
+                    </div>
+                    <div class="popup_close_btn" onclick="this.parentElement.style.display = 'none' ">X</div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <section class="sidebar">
+            <div class="sidebar-logo">
+                <img src="{%static 'images/logo.png' %}">
+                <span>VSCM</span>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="/dashboard_manufacturer"><i class="fa fa-desktop"></i> <span>Dashboard</span></a></li>
+                    <li><a href="/create_shipment"><i class="fa-solid fa-plus"></i> <span>Create Shipment</span></a></li>
+                    <li><a href="/transfer_shipment"><i class="fa-solid fa-arrow-up-right-from-square"></i><span>Transfer Shipment</span></a></li>
+                    <li><a href="/requests_received"><i class="fa-solid fa-right-to-bracket"></i><span>Request Received</span></a></li>
+                    <li><a href="/requests_sent"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span>Request Sent</span></a></li>
+                    <li><a href="/show_shipment"><i class="fa-sharp fa-solid fa-truck-fast"></i><span>Shipment</span></a></li>
+                </ul>
+            </div>
+        </section>
+        <div class="header-profile">
+            <img src="{{ loginUser.profileimg.url }}">
+            <span>{{ loginUser.name }}</span>
+            <div class="dropdown">
+                <button class="arrow-btn">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="/show_profile_setting">
+                        <i class="fa-solid fa-user"></i>
+                        Profile Setting
+                    </a>
+                    <a href="/logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class ="admin-content">
+            {% block content%}
+
+            {% endblock content%}
+        </div>
+    </body>
+</html>

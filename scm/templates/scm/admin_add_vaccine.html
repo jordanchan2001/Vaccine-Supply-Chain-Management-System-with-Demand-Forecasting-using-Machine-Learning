@@ -1,0 +1,32 @@
+{% extends 'scm/admin_index.html' %}
+
+{% load static %}
+
+{% block content %}
+<form action="/add_vaccine" method="POST">
+    {% csrf_token%}
+    <div class="add_vaccine_container">
+        <p class="title">
+            Add Vaccine
+        </p>
+        <div class="input-container">
+            <h5>Vaccine Name</h5>
+            <input type="text" class="normal-input" autocomplete="off" name="name">
+        </div>
+        
+        <div class="input-container">
+            <h5>Disease</h5>
+            <input type="text" class="normal-input" autocomplete="off" name="disease">
+        </div>
+        
+        <div class="input-container">
+            <h5>Dosage</h5>
+            <input type="text" class="normal-input" autocomplete="off" name="dosage">  
+        </div>
+
+        <div style="width:250px">
+            <input type="submit"  style="height:40px" class="btn" value="Add">
+        </div>
+    </div>
+</form>
+{% endblock content%}

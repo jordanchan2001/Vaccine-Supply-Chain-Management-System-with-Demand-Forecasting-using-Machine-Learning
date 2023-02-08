@@ -1,0 +1,72 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{%static 'css/main.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/5b2c1ebfb7.js" crossorigin="anonymous"></script>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Admin Home</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        {% for message in messages%}
+            {%if "success" in message.tags %}
+                <div class="msg-container">
+                    <div class="success-div">
+                        <div class="popup_msg">
+                            <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                            <p class="success-msg">{{message}}</p>
+                        </div>
+                        <div class="popup_close_btn" onclick="this.parentElement.parentElement.style.display = 'none' ">X</div>
+                    </div>
+                </div>
+            {% endif %}
+            {%if "error" in message.tags %}
+            <div class="msg-container">
+                <div class="error-div">
+                    <div class="popup_msg">
+                        <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                        <p class="error-msg">{{message}}</p>
+                    </div>
+                    <div class="popup_close_btn" onclick="this.parentElement.style.display = 'none' ">X</div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <section class="sidebar">
+            <div class="sidebar-logo">
+                <img src="{%static 'images/logo.png' %}">
+                <span>VSCM</span>
+            </div>
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a href="/dashboard"><i class="fa fa-desktop"></i> <span>Dashboard</span></a></li>
+                    <li><a href="/users"><i class="fa-solid fa-users"></i> <span>Users</span></a></li>
+                    <li><a href="/vaccines"><i class="fa-solid fa-syringe"></i> <span>Vaccines</span></a></li>
+                    <li><a href="/shipments"><i class="fa-solid fa-truck-fast"></i> <span>Shipments</span></a></li>
+                    <li><a href="/analysts"><i class="fa-sharp fa-solid fa-chart-line"></i><span>Demand Forecasting</span></a></li>
+                </ul>
+            </div>
+        </section>
+        <div class="header-profile">
+            <img src="{%static 'images/blank-profile-picture.png' %}">
+            <span>Admin</span>
+            <div class="dropdown">
+                <button class="arrow-btn">
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="/logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class ="admin-content">
+            {% block content%}
+
+            {% endblock content%}
+        </div>
+    </body>
+</html>

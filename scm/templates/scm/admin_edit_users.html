@@ -1,0 +1,82 @@
+{% extends 'scm/admin_index.html' %}
+
+{% load static %}
+
+{% block content %}
+    
+    <div class="edit-container">
+        <img class="edit-profile-img" src="{{selectedprofile.profileimg.url}}">
+        <h2 class="title">Edit Profile</h2>
+        <div class="edit-user-content">
+            <form action="/update_user/{{ selectedprofile.id_user }}" method="POST">
+                {% csrf_token %}
+                <div class="input-div one"> 
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Username</h5>
+                        <input type="text" class="input" autocomplete="off" name="username" value="{{selectedprofile.user.username}}">
+                    </div>
+                </div>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fa-solid fa-hospital"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Name</h5>
+                        <input type="text" class="input" autocomplete="off" disabled name="name" value="{{selectedprofile.name}}">
+                    </div>
+                </div>
+                <div class="input-div">
+                    <div class="i">
+                        <i class="fa-solid fa-envelope"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Email</h5>
+                        <input type="email" class="input" autocomplete="off" name="email" value="{{selectedprofile.user.email}}">
+                    </div>
+                </div>
+                <div class="input-div">
+                    <div class="i">
+                        <i class="fa-solid fa-suitcase-medical"></i>
+                    </div>
+                    <div class="div">
+                        <select required class="dropdown" name="user_type" >
+                            <option value=''  disabled="">Select User Type</option>
+                            <option value='Manufacturer' {% if selectedprofile.role == 'Manufacturer' %}selected{% endif %}>Manufacturer</option>
+                            <option value='Hospital' {% if selectedprofile.role == 'Hospital' %}selected{% endif %}>Hospital</option>
+                            <option value='Admin' {% if selectedprofile.role == 'Admin' %}selected{% endif %}>Admin</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-div">
+                    <div class="i">
+                        <i class="fa-solid fa-location-pin"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Location</h5>
+                        <input type="text" class="input" autocomplete="off" name="location" value="{{selectedprofile.location}}">
+                    </div>
+                </div>
+                <div class="input-div" style="margin-bottom:5px" >
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Password</h5>
+                        <input type="password" class="input" autocomplete="off" name="password">
+                    </div>
+                </div>
+                <p class="password_small_text">*Leave it empty to reuse the old password</p>
+                
+                <input type="submit" class="btn" value="Edit">
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript" src="{%static 'js/edit.js' %}"></script>
+
+{% endblock %}
+
+
+

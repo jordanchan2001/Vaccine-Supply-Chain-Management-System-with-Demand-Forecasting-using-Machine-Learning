@@ -1,0 +1,56 @@
+{% extends 'scm/admin_index.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="demandforecast_container">
+    <h2>Demand Forecasting for Vaccination</h2>
+    <select class="dropdown_hospital" name="hospital_name"  id="dropdown_hospital" >
+        <option value='' selected disabled="">Select Hospital For Demand Forecasting</option>
+        {% for hospital in hospitals %} 
+            <option value='{{hospital.name}}'>{{ hospital.name }}</option>
+        {% endfor %}
+    </select>
+    
+    <div>
+        {% for hospital, forecast in forecast_data.items %}
+            <p class = 'demandforecast_text' id = '{{hospital}}'>The vaccine demand forecasted for next month is {{forecast}}</p>
+        {% endfor %}
+        </p>
+    </div>
+    {% for hospital in hospitals %}
+        <img class='demandforecast_img' alt= 'Sorry, the hospital has not enough data (>12 months) to analyze !' src="{% static 'images/'|add:hospital.name|add:'.png' %}" id ='{{hospital.name}}'/>
+    {% endfor %}
+
+    
+    
+</div>
+
+<script>
+window.onload = function() {
+    var filterSel = document.getElementById("dropdown_hospital");
+    
+    filterSel.onchange = function()  {
+        var selectedValue = document.getElementById("dropdown_hospital").value;
+        var images =document.getElementsByClassName("demandforecast_img");
+        var texts =document.getElementsByClassName("demandforecast_text");
+        
+        for (let i = 0; i < images.length; i++) {
+            if (images[i].id === selectedValue){
+                images[i].style.display='block'
+            } else {
+                images[i].style.display='none'
+            }
+        }
+
+        for (let i = 0; i < texts.length; i++) {
+            if (texts[i].id === selectedValue){
+                texts[i].style.display='block'
+            } else {
+                texts[i].style.display='none'
+            }
+        }
+    };
+};
+</script>
+{% endblock content %}

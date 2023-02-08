@@ -1,0 +1,127 @@
+{% extends 'scm/manufacturer_index.html' %}
+{% load static %}
+{% block content %}
+{% for shipment in shipments%}
+<div class="popup" id={{shipment.id}}>
+    <div class="overlay"></div>
+    <div class="content">
+        <div class="close_button" id ={{shipment.id}} onclick ="togglePopup(this)">X</div>
+        <div class="popup_header">Shipment {{shipment.id}}</div>
+        <div class="popup_info">
+            <div class="shipment_info">
+                <h2>Items</h2>
+                {% for cart_items in carts_items_list %}
+                    {% if shipment.cart == cart_items.cart%}
+                        <div class="vaccine_info">
+                            <p>{{cart_items.vaccine_name}}</p>
+                            <p class="popup_quantity_text">Quantity : {{cart_items.vaccine_quantity}}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class="ownership_info">
+                <h2>Ownership Trace</h2>
+                {% for ownership in ownerships_list %}
+                    {% if ownership.supply_chain == shipment %}
+                        <div class="ownership_container">
+                            <div class="ownership_shape">
+                                <div class="shape_part1"></div>
+                                <div class="shape_part2"></div>
+                                <div class="shape_part3"></div>
+                            </div>
+                            <div class="ownership_infobox">
+                                <p class="popup_company_name">{{ownership.sender}}</p>
+                                {% for profile in profiles %}
+                                    {% if profile.name == ownership.sender %}
+                                    <p class="popup_location">Location : {{profile.location}}</p>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if shipment.issue == True%}
+                    <div class="ownership_container">
+                        <div class="ownership_shape">
+                            <div class="shape_part1"></div>
+                            <div class="shape_part2"></div>
+                            <div class="shape_part3"></div>
+                        </div>
+                        <div class="ownership_infobox">
+                            <p class="popup_company_name">{{shipment.ownership.name}}</p>
+                            {% for profile in profiles %}
+                                {% if profile == shipment.ownership %}
+                                    <p class="popup_location">Location : {{profile.location}}</p>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="user-content">
+    <h2>Shipments On-Hand</h2>
+    <div class="div-user-table">
+        <table class="table-user">
+            <thead class="table-header">
+                <tr>
+                    <th>Shipment ID</th>
+                    <th>Vaccine</th>
+                    <th>Origin</th>
+                    <th>Time Created</th>
+                    <th>Transferring Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shipment in shipments %}
+                <tr>
+                    <td>
+                        <p style="text-align:center">{{shipment.id}}</p>
+                    </td>
+                    <td>
+                        <div class="vaccine_cart_div">
+                        {% for cart_items in carts_items_list %}
+                            {% if shipment.cart == cart_items.cart%}
+                                <p>{{cart_items.vaccine_name}}<span class="text_quantity">&nbsp&nbsp&nbsp&nbsp&nbsp{{cart_items.vaccine_quantity}}</span></p>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+                        <p>{{shipment.origin}}</p>
+                    </td>
+                    <td>
+                        <p>{{shipment.time_created}}</p>
+                    </td>
+                    <td>
+                        {% if shipment.status_transferring == False %}
+                            <span class="badge badge-fail">False</span>
+                        {% else %}
+                            <span class="badge badge-success">True</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="view_btn" id = {{shipment.id}} onclick="togglePopup(this)">View</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function togglePopup(btn){
+        var id = btn.id;
+        console.log(id);
+        document.getElementById(id).classList.toggle("active");
+        // document.getElementById("popup-1").classList.toggle("active");
+    }
+</script>
+{% endblock content %}

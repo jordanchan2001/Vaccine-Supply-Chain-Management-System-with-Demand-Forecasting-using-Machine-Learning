@@ -1,0 +1,133 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{%static 'css/main.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/5b2c1ebfb7.js" crossorigin="anonymous"></script>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Manufacturer Home</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        {% for message in messages%}
+         {%if "success" in message.tags %}
+         <div class="popup_container">
+            <div class="success-div">
+                <div class="popup_msg">
+                    <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                    <p class="success-msg">{{message}}</p>
+                </div>
+                <div class="popup_close_btn" onclick="this.parentElement.style.display = 'none' ">X</div>
+            </div>
+         </div>
+         {% endif %}
+         {%if "error" in message.tags %}
+            <div class="popup_container">
+                <div class="error-div">
+                <div class="popup_msg">
+                    <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                    <p class="error-msg">{{message}}</p>
+                </div>
+                <div class="popup_close_btn" onclick="this.parentElement.style.display = 'none' ">X</div>
+                </div>
+            </div>
+         {% endif %}
+      {% endfor %}
+        {% if ownerships_list %}
+        <div class="popup active" id={{shipment.id}}>
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="close_button" id ={{shipment.id}} onclick ="togglePopup(this)">X</div>
+                <div class="popup_header">Shipment {{shipment.id}}</div>
+                <div class="popup_info">
+                    <div class="shipment_info">
+                        <h2>Items</h2>
+                        {% for cart_items in carts_items_list %}
+                            {% if shipment.cart == cart_items.cart%}
+                                <div class="vaccine_info">
+                                    <p>{{cart_items.vaccine_name}}</p>
+                                    <p class="popup_quantity_text">Quantity : {{cart_items.vaccine_quantity}}</p>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <p>Shipment Time: {{shipment.time_created}}</p>
+                    </div>
+                    <div class="ownership_info">
+                        <h2>Ownership Trace</h2>
+                        {% for ownership in ownerships_list %}
+                            {% if ownership.supply_chain == shipment %}
+                                <div class="ownership_container">
+                                    <div class="ownership_shape">
+                                        <div class="shape_part1"></div>
+                                        <div class="shape_part2"></div>
+                                        <div class="shape_part3"></div>
+                                    </div>
+                                    <div class="ownership_infobox">
+                                        <p class="popup_company_name">{{ownership.sender}}</p>
+                                        {% for profile in profiles %}
+                                            {% if profile.name == ownership.sender %}
+                                            <p class="popup_location">Location : {{profile.location}}</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% if shipment.issue == True%}
+                            <div class="ownership_container">
+                                <div class="ownership_shape">
+                                    <div class="shape_part1"></div>
+                                    <div class="shape_part2"></div>
+                                    <div class="shape_part3"></div>
+                                </div>
+                                <div class="ownership_infobox">
+                                    <p class="popup_company_name">{{shipment.ownership.name}}</p>
+                                    {% for profile in profiles %}
+                                        {% if profile == shipment.ownership %}
+                                            <p class="popup_location">Location : {{profile.location}}</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <form action ="" method="POST">
+            {% csrf_token %}
+            <div class="public_container">
+                <a href = "/">
+                    <img class="public_logo" src="{%static 'images/logo.png' %}">
+                </a>
+                
+                <h2>Welcome to VSCM, Guest !</h2>
+                <p>Vaccine Transactions Check</p>
+                <select class="public_dropdown" name="hospital_name"  id="dropdown_hospital" >
+                    <option value='' selected disabled="">Select Hospital</option>
+                    {% for hospital in hospitals %} 
+                        <option value='{{hospital.name}}'>{{ hospital.name }}</option>
+                    {% endfor %}
+                </select>
+                <input class="badgeid_input" type="text" name="badge_id" placeholder="Please Enter Vaccine Badge ID/Shipment ID...">
+                <input class="public_btn" type="submit" value="Submit">
+            </div>
+        </form>
+    </body>
+    <script>
+
+        function togglePopup(btn){
+            var id = btn.id;
+            console.log(id);
+            document.getElementById(id).classList.toggle("active");
+            // document.getElementById("popup-1").classList.toggle("active");
+        }
+    
+    </script>
+</html>
+

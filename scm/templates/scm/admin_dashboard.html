@@ -1,0 +1,112 @@
+{% extends 'scm/admin_index.html' %}
+{% load static %}
+{% block content %}
+<div class="dashboard_content">
+    <div class="data_box_container">
+        <div class="data_box">
+            <i class="fa-solid fa-users"></i>
+            <div>
+                <p class="data_box_text">Total Users</p>
+                <p class="data_box_number">{{profiles_count}}</p>
+            </div>
+        </div>
+        <div class="data_box">
+            <i class="fa-solid fa-syringe"></i>
+            <div>
+                <p class="data_box_text">Total Vaccines</p>
+                <p class="data_box_number">{{vaccines_count}}</p>
+            </div>
+        </div>
+        <div class="data_box">
+            <i class="fa-solid fa-truck-fast"></i>
+            <div>
+                <p class="data_box_text">Total Shipments</p>
+                <p class="data_box_number">{{shipments_count}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="data_list">
+        <div class="user_list_container">
+            <div class="recent_users_list">
+                <div class="dashboard_table_title">
+                    <p>Recent Users</p>
+                    <a href="/users">
+                        <button class="viewall_btn">View All</button>
+                    </a>
+                </div>
+                <table class="dashboard_table-user">
+                    <thead class="dashboard_table-header">
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in profiles %}
+                        <tr>
+                            <td>
+                                <div class="col-name">
+                                    <img src="{{profile.profileimg.url}}" alt="" class='profile-image'/>
+                                    <p style="margin-left:1rem" class="text-name">{{profile.name}}</p>
+                                </div>
+                            </td>
+                            <td>
+                                <p>{{profile.role}}</p>
+                            </td>
+                            <td>
+                                {% if profile.status == 'Inactive' %}
+                                <span class="badge badge-fail">Inactive</span>
+                                {% else %}
+                                <span class="badge badge-success">Active</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}         
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="shipment_list_container">
+            <div class="recent_shipments_list">
+                <div class="dashboard_table_title">
+                    <p>Recent Shipments</p>
+                    <a href="/shipments">
+                        <button class="viewall_btn">View All</button>
+                    </a>
+                </div>
+                <table class="dashboard_table-user">
+                    <thead class="dashboard_table-header">
+                        <tr>
+                            <th>Shipment ID</th>
+                            <th>Vaccine</th>
+                            <th>Current Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for shipment in shipments %}
+                        <tr>
+                            <td>
+                                <p style="text-align:center">{{shipment.id}}</p>
+                            </td>
+                            <td>
+                                <div class="vaccine_cart_div">
+                                {% for cart_items in carts_items_list %}
+                                    {% if shipment.cart == cart_items.cart%}
+                                        <p>{{cart_items.vaccine_name}}<span class="text_quantity">&nbsp&nbsp&nbsp&nbsp&nbsp{{cart_items.vaccine_quantity}}</span></p>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
+                            </td>
+                            <td>
+                                <p>{{shipment.ownership.name}}</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content%}
